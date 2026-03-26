@@ -97,6 +97,31 @@
                             <td><?= $row['correo'] ?></td>
                             <td>
                                 <a href="editar.php?id=<?= $row['id_paciente'] ?>" class="btn btn-warning btn-sm">Editar</a>
+                                <?php
+                                    $sql_t = "SELECT * FROM turnos 
+                                            WHERE id_paciente = ".$row['id_paciente']." 
+                                            AND estado='pendiente' 
+                                            AND fecha = CURDATE()";
+
+                                    $res_t = $conn->query($sql_t);
+                                    ?>
+
+                                    <?php if($res_t->num_rows > 0): ?>
+                                        <button class="btn btn-secondary btn-sm" disabled>
+                                            Turno pendiente
+                                        </button>
+                                    <?php else: ?>
+                                        <a href="../turnos/crear.php?id_paciente=<?= $row['id_paciente'] ?>" 
+                                        class="btn btn-success btn-sm">
+                                            Turno
+                                        </a>
+                                <?php endif; ?>
+
+                                
+                                <a href="../muestras/listar.php?id_paciente=<?= $row['id_paciente'] ?>" 
+                                    class="btn btn-info btn-sm">
+                                    Ver Muestras
+                                </a>
                             </td>
                         </tr>
                     <?php endwhile; ?>

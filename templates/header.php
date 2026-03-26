@@ -7,10 +7,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
-        <span class="navbar-brand">SIGMELAB</span>
-    </div>
-</nav>
+<?php include("navbar.php"); ?>
 
 <div class="container mt-4">
+
