@@ -2,6 +2,12 @@
 <?php include("../../config/conexion.php"); ?>
 
 <?php
+
+    if($_SESSION['rol'] == 'enfermero'){
+        echo "Acceso denegado";
+        exit;
+    }
+
     $buscar = isset($_GET['buscar']) ? $_GET['buscar'] : '';
     $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 

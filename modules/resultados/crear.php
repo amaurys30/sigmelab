@@ -2,6 +2,11 @@
 <?php include("../../config/conexion.php"); ?>
 
 <?php
+if($_SESSION['rol'] != 'laboratorista' && $_SESSION['rol'] != 'admin'){
+    echo "Acceso denegado";
+    exit;
+}
+
 $id_muestra = $_GET['id_muestra'];
 
 $sql = "SELECT m.*, p.nombres, p.apellidos 

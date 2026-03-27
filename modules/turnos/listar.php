@@ -1,5 +1,12 @@
 <?php include("../../templates/header.php"); ?>
-<?php include("../../config/conexion.php"); ?>
+<?php include("../../config/conexion.php"); 
+
+if($_SESSION['rol'] == 'laboratorista'){
+        echo "Acceso denegado";
+        exit;
+    }
+
+?>
 
 <h4>Turnos del Día</h4>
 

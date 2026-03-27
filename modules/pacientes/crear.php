@@ -1,4 +1,9 @@
-<?php include("../../templates/header.php"); ?>
+<?php include("../../templates/header.php"); 
+if($_SESSION['rol'] == 'enfermero' || $_SESSION['rol'] == 'laboratorista'){
+    echo "Acceso denegado";
+    exit;
+}
+?>
 
 <div class="card shadow">
     <div class="card-header bg-primary text-white">

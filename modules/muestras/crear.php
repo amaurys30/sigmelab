@@ -1,7 +1,13 @@
+
 <?php include("../../templates/header.php"); ?>
 <?php include("../../config/conexion.php"); ?>
 
 <?php
+if($_SESSION['rol'] == 'recepcionista'){
+    echo "Acceso denegado";
+    exit;
+}
+
 $id_paciente = $_GET['id_paciente'];
 
 $sql = "SELECT * FROM pacientes WHERE id_paciente=$id_paciente";

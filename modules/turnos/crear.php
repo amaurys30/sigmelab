@@ -2,6 +2,11 @@
 <?php include("../../config/conexion.php"); ?>
 
 <?php
+if($_SESSION['rol'] == 'laboratorista'){
+        echo "Acceso denegado";
+        exit;
+    }
+
 $id_paciente = isset($_GET['id_paciente']) ? $_GET['id_paciente'] : null;
 
 if($id_paciente){

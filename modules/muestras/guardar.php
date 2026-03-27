@@ -1,10 +1,18 @@
 <?php
+session_start();
 include("../../config/conexion.php");
 
+// 🔐 Validar sesión
+if(!isset($_SESSION['id_usuario'])){
+    header("Location: ../auth/login.php");
+    exit;
+}
+
+$id_usuario = $_SESSION['id_usuario'];
 $id_paciente = $_POST['id_paciente'];
 $tipo = $_POST['tipo_examen'];
 
-// 🔥 VALIDAR EXAMEN DUPLICADO EN EL MISMO DÍA
+// 🔥 VALIDAR EXAMEN DUPLICADO
 $sql = "SELECT * FROM muestras 
         WHERE id_paciente = ? 
         AND tipo_examen = ? 
@@ -23,32 +31,29 @@ if($result->num_rows > 0){
     exit;
 }
 
-// 🔥 GENERAR CÓDIGO ÚNICO
+// 🔥 GENERAR CÓDIGO
 $codigo = "MUE-" . date("YmdHis");
 
-// 🔥 INSERTAR MUESTRA
+// 🔥 INSERT CORREGIDO (4 CAMPOS)
 $stmt = $conn->prepare("INSERT INTO muestras 
-(id_paciente, codigo_muestra, tipo_examen)
-VALUES (?, ?, ?)");
+(id_paciente, id_usuario, codigo_muestra, tipo_examen)
+VALUES (?, ?, ?, ?)");
 
-$stmt->bind_param("iss", $id_paciente, $codigo, $tipo);
+$stmt->bind_param("iiss", $id_paciente, $id_usuario, $codigo, $tipo);
 $stmt->execute();
 
-
-// 🔥 OBTENER ID DE LA MUESTRA
+// 🔥 OBTENER ID
 $id_muestra = $conn->insert_id;
 
-// 🔥 ABRIR IMPRESIÓN AUTOMÁTICA
+// 🔥 FLUJO
 echo "<script>
     alert('Muestra registrada correctamente');
 
-    // abrir impresión
-    var ventana = window.open('imprimir.php?id=$id_muestra', '_blank');
-
-    // esperar antes de redirigir
+    window.open('imprimir.php?id=$id_muestra', '_blank');
     setTimeout(function(){
         window.location='listar.php';
     }, 1000);
 </script>";
 
 ?>
+
