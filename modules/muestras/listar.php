@@ -8,11 +8,17 @@ if($id_paciente){
     $sql = "SELECT m.*, p.nombres, p.apellidos 
             FROM muestras m
             JOIN pacientes p ON m.id_paciente = p.id_paciente
-            WHERE m.id_paciente = $id_paciente";
+            WHERE m.id_paciente = $id_paciente
+            ORDER BY 
+            (m.estado = 'finalizada') ASC,
+            m.fecha_toma DESC";
 } else {
     $sql = "SELECT m.*, p.nombres, p.apellidos 
             FROM muestras m
-            JOIN pacientes p ON m.id_paciente = p.id_paciente";
+            JOIN pacientes p ON m.id_paciente = p.id_paciente
+            ORDER BY 
+            (m.estado = 'finalizada') ASC,
+            m.fecha_toma DESC";
 }
 
 $result = $conn->query($sql);
@@ -50,18 +56,34 @@ $result = $conn->query($sql);
                     </td>
 
                     <td>
-                        <!-- 🔥 BOTÓN IMPRIMIR -->
-                        <a href="imprimir.php?id=<?= $row['id_muestra'] ?>" 
-                        class="btn btn-secondary btn-sm" target="_blank">
-                            Imprimir
-                        </a>
 
-                        <!-- 🔒 OPCIONAL: SOLO SI NO ESTÁ FINALIZADA -->
-                        <?php if($row['estado'] == 'finalizada'): ?>
+                        <!-- 🔥 SOLO SI NO ESTÁ FINALIZADA -->
+                        <?php if($row['estado'] != 'finalizada'): ?>
+                            
+                            <a href="imprimir.php?id=<?= $row['id_muestra'] ?>" 
+                            class="btn btn-secondary btn-sm" target="_blank">
+                                Imprimir
+                            </a>
+
+                            <a href="../resultados/crear.php?id_muestra=<?= $row['id_muestra'] ?>" 
+                            class="btn btn-success btn-sm">
+                                Registrar Resultado
+                            </a>
+
+                        <?php else: ?>
+
+                            <!-- 🔥 BOTÓN VER RESULTADO -->
+                            <a href="../resultados/ver.php?id_muestra=<?= $row['id_muestra'] ?>" 
+                            class="btn btn-info btn-sm">
+                                Ver Resultado
+                            </a>
+
                             <button class="btn btn-dark btn-sm" disabled>
-                                Cerrada
+                                Finalizada
                             </button>
+
                         <?php endif; ?>
+
                     </td>
 
                 </tr>
