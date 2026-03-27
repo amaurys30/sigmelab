@@ -41,6 +41,29 @@ $stmt = $conn->prepare("UPDATE muestras SET estado='finalizada' WHERE id_muestra
 $stmt->bind_param("i", $id_muestra);
 $stmt->execute();
 
+//enviar correo
+
+require("../../config/mail.php");
+
+// 🔍 Obtener datos del paciente
+$sql = "SELECT p.nombres, p.correo, m.codigo_muestra
+        FROM muestras m
+        JOIN pacientes p ON m.id_paciente = p.id_paciente
+        WHERE m.id_muestra = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id_muestra);
+$stmt->execute();
+$data = $stmt->get_result()->fetch_assoc();
+
+// 🔥 Enviar correo
+enviarResultado(
+    $data['correo'],
+    $data['nombres'],
+    $data['codigo_muestra']
+);
+
+
 // 🔥 RESPUESTA
 echo "<script>
     alert('Resultado registrado correctamente');
